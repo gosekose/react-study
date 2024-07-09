@@ -1,6 +1,11 @@
 import propTypes from 'prop-types'
 
-const Pagination = ({ currentPage, numberOfPages, onClick }) => {
+const Pagination = ({ currentPage, numberOfPages, onClick, limit }) => {
+    const currentSet = Math.ceil(currentPage / limit);
+    const startPage = limit * (currentSet - 1) + 1;
+    const lastSet = Math.ceil(numberOfPages / limit);
+    const numberOfPagesForSet = currentSet === lastSet ? numberOfPages % limit : limit
+    
     return (
         <nav aria-label="Page navigation example">
             <ul className="pagination justify-content-center">
@@ -14,7 +19,7 @@ const Pagination = ({ currentPage, numberOfPages, onClick }) => {
                     >Previous</div>
                 </li>
                 {
-                    Array.from({ length: numberOfPages }, (_, index) => index + 1).map((pageNumber) => {
+                    Array.from({ length: numberOfPagesForSet }, (_, index) => startPage + index).map((pageNumber) => {
                         return <li
                             key={pageNumber}
                             className={`page-item ${currentPage === pageNumber ? 'active' : ''}`}
@@ -47,10 +52,12 @@ Pagination.prototype = {
     currentPage: propTypes.number.isRequired,
     numberOfPages: propTypes.number.isRequired,
     onClick: propTypes.func.isRequired,
+    limit: propTypes.number,
 }
 
 Pagination.defaultProps = {
-    currentPage: 1
+    currentPage: 1,
+    limit: 5,
 }
 
 export default Pagination;
