@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Card from "../components/Card";
-import PropTypes from 'prop-types';
 import { Link, useNavigate } from "react-router-dom";
+import NoItem from "../components/NoItem";
 
 const ListPage = () => {
     const navigate = useNavigate();
@@ -14,9 +14,15 @@ const ListPage = () => {
         })
     }
 
+    const deleteBlog = (e, id) => {
+        e.stopPropagation();
+        axios.delete(`http://localhost:3030/posts/${id}`).then(() => {
+            setPosts(prevPost => prevPost.filter(post => post.id !== id));
+        })
+    }
+
     useEffect(() => {
         getPosts();
-        console.log(posts)
     }, []);
 
     return (
@@ -28,7 +34,7 @@ const ListPage = () => {
                 </div>
             </div>
             <div className="mt-3">
-                {posts.map(post => {
+                {posts.length > 0 ? posts.map(post => {
                     return (
                         <Card
                             key={post.id}
@@ -36,19 +42,19 @@ const ListPage = () => {
                             body={post.body}
                             onClick={() => navigate('/blogs/edit')}
                         >
-                            <button className="btn btn-info">이동</button>
+                            <div>
+                                <button 
+                                    className="btn btn-danger btn-sm"
+                                    onClick={(e) => deleteBlog(e, post.id)}
+                                >삭제</button>
+                            </div>
                         </Card>
                     )
                 }
-                )}
+                ) : <NoItem message="No Blog Posts"/>}
             </div>
         </div>
     );
-}
-
-Card.prototypes = {
-    title: PropTypes.string.isRequired,
-    body: PropTypes.string,
 }
 
 export default ListPage
