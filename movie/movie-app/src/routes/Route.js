@@ -18,7 +18,7 @@ const routes = [
       element: <CreatePage />
     },
     {
-      path: '/blogs/edit',
+      path: '/blogs/:id/edit',
       element: <EditPage />
     },
     {

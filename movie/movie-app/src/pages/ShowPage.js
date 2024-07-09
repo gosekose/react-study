@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import CreatedAt from "../components/CreatedAt";
+import { Link } from "react-router-dom";
 
 const ShowPage = () => {
-    const {id} = useParams();
+    const { id } = useParams();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -21,14 +22,22 @@ const ShowPage = () => {
     }, [id]) // 의존성 배열 id가 변경이 되면 실행
 
     if (loading) {
-        return <LoadingSpinner/>
+        return <LoadingSpinner />
     }
 
     return (
         <div>
-            <h1>{post.title}</h1>
-            <small class="text-muted">{CreatedAt(post.createdAt)}</small>
-            <hr/>
+            <div className="d-flex">
+                <h1 className="flex-grow-1">{post.title}</h1>
+                <div>
+                    <Link
+                        className="btn btn-primary"
+                        to={`/blogs/${id}/edit`}
+                    > Edit </Link>
+                </div>
+            </div>
+            <small className="text-muted">{CreatedAt(post.createdAt)}</small>
+            <hr />
             <p>{post.body}</p>
         </div>
     )
