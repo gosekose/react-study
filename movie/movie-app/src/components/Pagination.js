@@ -5,15 +5,13 @@ const Pagination = ({ currentPage, numberOfPages, onClick, limit }) => {
     const startPage = limit * (currentSet - 1) + 1;
     const lastSet = Math.ceil(numberOfPages / limit);
     const numberOfPagesForSet = currentSet === lastSet ? numberOfPages % limit : limit
-    
     return (
         <nav aria-label="Page navigation example">
             <ul className="pagination justify-content-center">
                 <li className={`page-item ${currentSet === 1 ? 'disabled' : ''}`}>
                     <div
                         className="page-link cursor-pointer"
-                        onClick={(e) => {
-                            e.preventDefault();
+                        onClick={() => {
                             onClick(currentSet - 1)
                         }}
                     >Previous</div>
@@ -26,8 +24,7 @@ const Pagination = ({ currentPage, numberOfPages, onClick, limit }) => {
                         >
                             <div
                                 className="page-link cursor-pointer"
-                                onClick={(e) => {
-                                    e.preventDefault();
+                                onClick={() => {
                                     onClick(pageNumber)
                                 }}
                             >{pageNumber}</div>
@@ -37,8 +34,7 @@ const Pagination = ({ currentPage, numberOfPages, onClick, limit }) => {
                 <li className={`page-item ${currentSet === lastSet ? 'disabled' : ''}`}>
                     <div
                         className="page-link cursor-pointer"
-                        onClick={(e) => {
-                            e.preventDefault();
+                        onClick={() => {
                             onClick(startPage + limit)
                         }}
                     >Next</div>

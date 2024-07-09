@@ -6,6 +6,7 @@ import NoItem from "../components/NoItem";
 import LoadingSpinner from "../components/LoadingSpinner";
 import CreatedAt from "../components/CreatedAt";
 import Pagination from "./Pagination";
+import { useLocation } from "react-router-dom";
 
 
 const BlogList = ({ isAdmin }) => {
@@ -14,10 +15,26 @@ const BlogList = ({ isAdmin }) => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const pageParam = params.get('page');
+
+    const onClickPageButton = (page) => {
+        navigate(`${location.pathname}?page=${page}`)
+    }
+
+    useEffect(() => {
+        setTotalPages(totalPages);
+    }, [totalPages]);
+    
+    useEffect(() => {
+        setCurrentPage(parseInt(pageParam) || 1);
+        getPosts(parseInt(pageParam) || 1);
+    }, [pageParam]);
 
     const getPosts = (page = 1) => {
-        setCurrentPage(page);
         console.log("page = ", page);
+        setCurrentPage(parseInt(page) || 1);
         let params = {
             _page: page,
             _per_page: 5,
@@ -47,10 +64,6 @@ const BlogList = ({ isAdmin }) => {
             setPosts(prevPost => prevPost.filter(post => post.id !== id));
         })
     }
-
-    useEffect(() => {
-        getPosts();
-    }, []);
 
     if (loading) {
         return <LoadingSpinner />;
@@ -92,7 +105,7 @@ const BlogList = ({ isAdmin }) => {
             <Pagination
                 currentPage={currentPage}
                 numberOfPages={totalPages}
-                onClick={getPosts}
+                onClick={onClickPageButton}
             />
         </div>
 
