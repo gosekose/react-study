@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import { Link, useNavigate } from "react-router-dom";
 import NoItem from "../components/NoItem";
 import LoadingSpinner from "../components/LoadingSpinner";
+import CreatedAt from "../components/CreatedAt";
 
 const ListPage = () => {
     const navigate = useNavigate();
@@ -40,7 +41,8 @@ const ListPage = () => {
                         key={post.id}
                         title={post.title}
                         body={post.body}
-                        onClick={() => navigate('/blogs/edit')}
+                        createdAt={CreatedAt(post.createdAt)}
+                        onClick={() => navigate(`/blogs/${post.id}`)}
                     >
                         <div>
                             <button

@@ -11,7 +11,8 @@ const BlogForm = () => {
         console.log(title, body);
         axois.post('http://localhost:3030/posts', {
             title: title,
-            body: body
+            body: body,
+            createdAt: Date.now()
         }).then(() => {
             navigate('/blogs');
         })

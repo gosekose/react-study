@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const Card = ({ title, body, onClick, children }) => {
+const Card = ({ title, body, createdAt, onClick, children }) => {
     return (
         <div
             className="card mb-3 cursor-pointer"
@@ -8,6 +8,7 @@ const Card = ({ title, body, onClick, children }) => {
         >
             <div className="card-body">
                 <h5 className="card-title">{title}</h5>
+                <small class="text-muted">{createdAt}</small>
                 <div className="d-flex justify-content-between">
                     <p className="card-text">{body}</p>
                     {children && <div> {children} </div>}

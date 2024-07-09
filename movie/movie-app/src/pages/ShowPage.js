@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
+import CreatedAt from "../components/CreatedAt";
 
 const ShowPage = () => {
     const {id} = useParams();
@@ -26,6 +27,8 @@ const ShowPage = () => {
     return (
         <div>
             <h1>{post.title}</h1>
+            <small class="text-muted">{CreatedAt(post.createdAt)}</small>
+            <hr/>
             <p>{post.body}</p>
         </div>
     )
