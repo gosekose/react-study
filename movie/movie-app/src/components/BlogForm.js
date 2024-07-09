@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import axois from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const BlogForm = () => {
+    const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
 
@@ -10,6 +12,8 @@ const BlogForm = () => {
         axois.post('http://localhost:3030/posts', {
             title: title,
             body: body
+        }).then(() => {
+            navigate('/blogs');
         })
     }
 

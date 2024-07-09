@@ -2,10 +2,20 @@ import {
     Link, NavLink
 } from 'react-router-dom';
 
-import routes from '../routes/Route';
-
 const NavBar = () => {
-    const navItems = routes.map((route) => {
+
+    const menu = [
+        {
+          path: '/',
+          name: 'Home',
+        },
+        {
+          path: '/blogs',
+          name: 'Blogs',
+        },
+    ]
+
+    const navItems = menu.map((route) => {
         return (
             <li className='nav-item' key={route.path}>
                 <NavLink key={route.path} className="nav-link" to={route.path} end>
