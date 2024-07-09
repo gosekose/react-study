@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
 import Card from "../components/Card";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NoItem from "../components/NoItem";
 import LoadingSpinner from "../components/LoadingSpinner";
 import CreatedAt from "../components/CreatedAt";
 import Pagination from "./Pagination";
 import { useLocation } from "react-router-dom";
-
+import propTypes from 'prop-types';
+import SearchBar from "./SearchBar";
 
 const BlogList = ({ isAdmin }) => {
     const navigate = useNavigate();
@@ -15,22 +16,27 @@ const BlogList = ({ isAdmin }) => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [searchText, setSearchText] = useState('');
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const pageParam = params.get('page');
 
     const onClickPageButton = (page) => {
         navigate(`${location.pathname}?page=${page}`)
+        setCurrentPage(parseInt(page) || 1);
+        getPosts(page);
     }
 
     const getPosts = useCallback((page = 1) => {
         console.log("page = ", page);
         setCurrentPage(parseInt(page) || 1);
+        console.log("searchText = ", searchText);
         let params = {
             _page: page,
             _per_page: 5,
             _sort: 'id',
             _order: 'desc',
+            title: searchText,
         }
 
         if (isAdmin) {
@@ -44,15 +50,15 @@ const BlogList = ({ isAdmin }) => {
         }).then((res) => {
             console.log(res.data);
             setPosts(res.data.data);
-            setTotalPages(res.data.pages);     
+            setTotalPages(res.data.pages);
             setLoading(false);
         })
-    }, [isAdmin]);
+    }, [isAdmin, searchText]);
 
     useEffect(() => {
         setCurrentPage(parseInt(pageParam) || 1);
         getPosts(parseInt(pageParam) || 1);
-    }, [pageParam, getPosts]);
+    }, []);
 
     useEffect(() => {
         setTotalPages(totalPages);
@@ -68,10 +74,6 @@ const BlogList = ({ isAdmin }) => {
     if (loading) {
         return <LoadingSpinner />;
     };
-
-    if (posts.length === 0) {
-        return <NoItem message="No Blog Posts" />;
-    }
 
     const viewBlogList = () => {
         return (
@@ -99,17 +101,38 @@ const BlogList = ({ isAdmin }) => {
         );
     }
 
+    const onSearch = () => {
+        setCurrentPage(1);
+        getPosts(1);
+    }
+
     return (
         <div>
-            {viewBlogList()}
-            <Pagination
-                currentPage={currentPage}
-                numberOfPages={totalPages}
-                onClick={onClickPageButton}
+            <SearchBar
+                value={searchText}
+                onChange={setSearchText}
+                onKeyUp={onSearch}
             />
+            <hr />
+            {posts.length === 0
+                ? <NoItem />
+                : <>
+                    {viewBlogList()}
+                    <Pagination
+                        currentPage={currentPage}
+                        numberOfPages={totalPages}
+                        onClick={onClickPageButton}
+                    />
+                </>
+            }
+
         </div>
 
     )
+}
+
+BlogList.prototype = {
+    isAdmin: propTypes.bool
 }
 
 export default BlogList;
