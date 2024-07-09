@@ -2,10 +2,10 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Card from "../components/Card";
 import PropTypes from 'prop-types';
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 
 const ListPage = () => {
+    const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
 
     const getPosts = () => {
@@ -30,7 +30,12 @@ const ListPage = () => {
             <div className="mt-3">
                 {posts.map(post => {
                     return (
-                        <Card key={post.id} title={post.title} body={post.body}>
+                        <Card
+                            key={post.id}
+                            title={post.title}
+                            body={post.body}
+                            onClick={() => navigate('/blogs/edit')}
+                        >
                             <button className="btn btn-info">이동</button>
                         </Card>
                     )
