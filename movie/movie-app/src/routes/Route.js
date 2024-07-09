@@ -6,7 +6,7 @@ import EditPage from '../pages/EditPage';
 const routes = [
     {
       path: '/',
-      name: 'HomePage',
+      name: 'Home',
       element: <HomePage />
     },
     {

@@ -1,25 +1,28 @@
 import {
-    Link
+    Link, NavLink
 } from 'react-router-dom';
 
+import routes from '../routes/Route';
+
 const NavBar = () => {
+    const navItems = routes.map((route) => {
+        return (
+            <li className='nav-item'>
+                <NavLink key={route.path} className="nav-link" to={route.path} end>
+                    {route.name}
+                </NavLink>
+            </li>
+        );
+    });
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link className="navbar-brand" to="/">Home</Link>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/blogs">Blogs</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/blogs/create">Blogs Create</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/blogs/edit">Blogs Edit</Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul className="navbar-nav mr-auto">
+                    {navItems}
+                </ul>
+            </div>
+        </nav>
     );
 };
 
