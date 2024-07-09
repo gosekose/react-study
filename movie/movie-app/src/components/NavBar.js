@@ -6,12 +6,16 @@ const NavBar = () => {
 
     const menu = [
         {
-          path: '/',
-          name: 'Home',
+            path: '/',
+            name: 'Home',
         },
         {
-          path: '/blogs',
-          name: 'Blogs',
+            path: '/blogs',
+            name: 'Blogs',
+        },
+        {
+            path: '/admin',
+            name: 'Admin',
         },
     ]
 

@@ -3,11 +3,16 @@ import HomePage from '../pages/HomePage';
 import ListPage from '../pages/ListPage';
 import EditPage from '../pages/EditPage';
 import ShowPage from '../pages/ShowPage';
+import AdminPage from '../pages/AdminPage';
 
 const routes = [
     {
       path: '/',
       element: <HomePage />
+    },
+    {
+      path: '/admin',
+      element: <AdminPage />
     },
     {
       path: '/blogs',
