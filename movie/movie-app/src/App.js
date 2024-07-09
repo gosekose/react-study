@@ -13,7 +13,7 @@ function App() {
       <div className="mb-3">
         <NavBar>
         </NavBar>
-        <div className="container">
+        <div className="container mt-3">
           <Routes>
             {routes.map((route) => {
               return <Route key={route.path} exact path={route.path} element={route.element} />;
