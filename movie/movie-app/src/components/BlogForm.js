@@ -3,6 +3,7 @@ import axois from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { bool } from 'prop-types';
 import FormCheckSwitch from './FormCheckSwitch';
+import FormValidation from './FormValidation';
 
 const BlogForm = ({ editing }) => {
     const navigate = useNavigate();
@@ -13,10 +14,33 @@ const BlogForm = ({ editing }) => {
     const [originalTitle, setOriginalTitle] = useState('');
     const [originalBody, setOriginalBody] = useState('');
     const [originalPublish, setOriginalPublish] = useState('');
+    const [titleError, setTitleError] = useState(false);
+    const [bodyError, setBodyError] = useState(false);
 
     const { id } = useParams();
 
+    const validateForm = () => {
+        let validated = true;
+        if (title === '') {
+            setTitleError(true);
+            validated = false;
+        }
+        if (body === '') {
+            setBodyError(true);
+            validated = false;
+        }
+
+        return validated;
+    }
+
     const onSubmit = () => {
+        setTitleError(false);
+        setBodyError(false);
+
+        if (!validateForm()) {
+            return;
+        }
+
         if (editing) {
             console.log(title, body);
             axois.put(`http://localhost:3030/posts/${id}`, {
@@ -76,18 +100,22 @@ const BlogForm = ({ editing }) => {
             <div className='mb-3'>
                 <label className='form-label'>Title</label>
                 <input
-                    className="form-control"
+                    className={`form-control ${titleError ? 'border-danger': ''}`}
                     value={title}
                     onChange={(event) => {
                         setTitle(event.target.value)
                         console.log(event.target.value)
                     }}
                 />
-            </div>
+                {titleError ? <FormValidation message={'Title is Required'} /> : null}
+            </div>            
             <div className='mb-3'>
-                <label className='form-label'>Body</label>
+                <label
+                    className='form-label'>
+                    Body
+                </label>
                 <textarea
-                    className="form-control"
+                    className={`form-control ${bodyError ? 'border-danger' : ''}`}
                     value={body}
                     onChange={(event) => {
                         setBody(event.target.value)
@@ -95,6 +123,7 @@ const BlogForm = ({ editing }) => {
                     }}
                     rows='10'
                 />
+                {bodyError ? <FormValidation message={'Body is Required'} /> : null}
             </div>
             <FormCheckSwitch
                 isChecked={publish}
