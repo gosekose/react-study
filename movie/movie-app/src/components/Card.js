@@ -8,7 +8,7 @@ const Card = ({ title, body, createdAt, onClick, children }) => {
         >
             <div className="card-body">
                 <h5 className="card-title">{title}</h5>
-                <small class="text-muted">{createdAt}</small>
+                <small className="text-muted">{createdAt}</small>
                 <div className="d-flex justify-content-between">
                     <p className="card-text">{body}</p>
                     {children && <div> {children} </div>}

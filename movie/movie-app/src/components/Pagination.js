@@ -9,12 +9,12 @@ const Pagination = ({ currentPage, numberOfPages, onClick, limit }) => {
     return (
         <nav aria-label="Page navigation example">
             <ul className="pagination justify-content-center">
-                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <li className={`page-item ${currentSet === 1 ? 'disabled' : ''}`}>
                     <div
                         className="page-link cursor-pointer"
                         onClick={(e) => {
                             e.preventDefault();
-                            onClick(currentPage - 1)
+                            onClick(currentSet - 1)
                         }}
                     >Previous</div>
                 </li>
@@ -34,12 +34,12 @@ const Pagination = ({ currentPage, numberOfPages, onClick, limit }) => {
                         </li>;
                     })
                 }
-                <li className={`page-item ${currentPage === numberOfPages ? 'disabled' : ''}`}>
+                <li className={`page-item ${currentSet === lastSet ? 'disabled' : ''}`}>
                     <div
                         className="page-link cursor-pointer"
                         onClick={(e) => {
                             e.preventDefault();
-                            onClick(currentPage + 1)
+                            onClick(startPage + limit)
                         }}
                     >Next</div>
                 </li>
