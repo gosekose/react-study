@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { bool } from 'prop-types';
 import FormCheckSwitch from './FormCheckSwitch';
 import FormValidation from './FormValidation';
+import {v4 as uuidv4 } from 'uuid';
 
 const BlogForm = ({ editing }) => {
     const navigate = useNavigate();

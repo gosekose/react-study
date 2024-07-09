@@ -9,6 +9,8 @@ import Pagination from "./Pagination";
 import { useLocation } from "react-router-dom";
 import propTypes from 'prop-types';
 import SearchBar from "./SearchBar";
+import Toast from "./Toast";
+import { v4 as uuidv4 } from 'uuid';
 
 const BlogList = ({ isAdmin }) => {
     const navigate = useNavigate();
@@ -17,6 +19,7 @@ const BlogList = ({ isAdmin }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [searchText, setSearchText] = useState('');
+    const [toast, setToast] = useState([]);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const pageParam = params.get('page');
@@ -64,10 +67,35 @@ const BlogList = ({ isAdmin }) => {
         setTotalPages(totalPages);
     }, [totalPages]);
 
+    const deleteToast = (id) => {
+        const filteredToasts = toast.filter(toast => {
+            return toast.id !== id;
+        })
+
+        setToast(filteredToasts);
+    }
+
+    const addToast = (toast) => {
+        const id = uuidv4();
+        const toastWithId = {
+            ...toast,
+            id: id
+        }
+        setToast(prev => [...prev, toastWithId]);
+        
+        setTimeout(() => {
+            deleteToast(id);
+        }, 5000);
+    }
+
     const deleteBlog = (e, id) => {
         e.stopPropagation();
         axios.delete(`http://localhost:3030/posts/${id}`).then(() => {
             setPosts(prevPost => prevPost.filter(post => post.id !== id));
+            addToast({
+                text: '삭제되었습니다.',
+                type: 'success'
+            })
         })
     }
 
@@ -125,7 +153,9 @@ const BlogList = ({ isAdmin }) => {
                     />
                 </>
             }
-
+            <Toast
+                toasts={toast}
+                deleteToast={deleteToast} />
         </div>
 
     )
