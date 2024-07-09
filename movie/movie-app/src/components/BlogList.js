@@ -10,16 +10,17 @@ import { useLocation } from "react-router-dom";
 import propTypes from 'prop-types';
 import SearchBar from "./SearchBar";
 import Toast from "./Toast";
-import { v4 as uuidv4 } from 'uuid';
+import useToast from "../hooks/toast";
 
 const BlogList = ({ isAdmin }) => {
+    const [toasts, addToast, deleteToast] = useToast([]);
+
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [searchText, setSearchText] = useState('');
-    const [toast, setToast] = useState([]);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const pageParam = params.get('page');
@@ -66,27 +67,6 @@ const BlogList = ({ isAdmin }) => {
     useEffect(() => {
         setTotalPages(totalPages);
     }, [totalPages]);
-
-    const deleteToast = (id) => {
-        const filteredToasts = toast.filter(toast => {
-            return toast.id !== id;
-        })
-
-        setToast(filteredToasts);
-    }
-
-    const addToast = (toast) => {
-        const id = uuidv4();
-        const toastWithId = {
-            ...toast,
-            id: id
-        }
-        setToast(prev => [...prev, toastWithId]);
-        
-        setTimeout(() => {
-            deleteToast(id);
-        }, 5000);
-    }
 
     const deleteBlog = (e, id) => {
         e.stopPropagation();
@@ -154,7 +134,7 @@ const BlogList = ({ isAdmin }) => {
                 </>
             }
             <Toast
-                toasts={toast}
+                toasts={toasts}
                 deleteToast={deleteToast} />
         </div>
 

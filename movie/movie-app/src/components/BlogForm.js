@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axois from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { bool } from 'prop-types';
 import FormCheckSwitch from './FormCheckSwitch';
 import FormValidation from './FormValidation';
-import {v4 as uuidv4 } from 'uuid';
+import Toast from './Toast';
+import useToast from '../hooks/toast';
 
 const BlogForm = ({ editing }) => {
+    const [toasts, addToast, deleteToast] = useToast([]);
+
     const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
@@ -15,6 +18,7 @@ const BlogForm = ({ editing }) => {
     const [originalTitle, setOriginalTitle] = useState('');
     const [originalBody, setOriginalBody] = useState('');
     const [originalPublish, setOriginalPublish] = useState('');
+
     const [titleError, setTitleError] = useState(false);
     const [bodyError, setBodyError] = useState(false);
 
@@ -60,6 +64,10 @@ const BlogForm = ({ editing }) => {
                 publish: publish,
                 createdAt: Date.now()
             }).then(() => {
+                addToast({
+                    type: 'success',
+                    text: 'Successfully Create'
+                })
                 navigate('/admin');
             })
         }
@@ -101,7 +109,7 @@ const BlogForm = ({ editing }) => {
             <div className='mb-3'>
                 <label className='form-label'>Title</label>
                 <input
-                    className={`form-control ${titleError ? 'border-danger': ''}`}
+                    className={`form-control ${titleError ? 'border-danger' : ''}`}
                     value={title}
                     onChange={(event) => {
                         setTitle(event.target.value)
@@ -109,7 +117,7 @@ const BlogForm = ({ editing }) => {
                     }}
                 />
                 {titleError ? <FormValidation message={'Title is Required'} /> : null}
-            </div>            
+            </div>
             <div className='mb-3'>
                 <label
                     className='form-label'>
@@ -143,6 +151,10 @@ const BlogForm = ({ editing }) => {
             >
                 Cancel
             </button>
+            <Toast
+                toasts={toasts}
+                deleteToast={deleteToast}
+            />
         </div>
     )
 }
