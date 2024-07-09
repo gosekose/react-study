@@ -4,8 +4,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { bool } from 'prop-types';
 import FormCheckSwitch from './FormCheckSwitch';
 import FormValidation from './FormValidation';
+import Toast from './Toast';
+import useToast from '../hooks/toast';
 
-const BlogForm = ({ editing, addToast }) => {
+const BlogForm = ({ editing }) => {
+    const [toasts, addToast, deleteToast] = useToast([]);
+
     const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
@@ -147,6 +151,10 @@ const BlogForm = ({ editing, addToast }) => {
             >
                 Cancel
             </button>
+            <Toast
+                toasts={toasts}
+                deleteToast={deleteToast}
+            />
         </div>
     )
 }

@@ -28,7 +28,7 @@ function App() {
                 key={route.path}
                 exact
                 path={route.path}
-                element={<Component addToast={addToast} />}
+                element={route.element}
               />;
             })}
           </Routes>
