@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Card from "../components/Card";
 import { Link, useNavigate } from "react-router-dom";
 import NoItem from "../components/NoItem";
@@ -23,16 +23,7 @@ const BlogList = ({ isAdmin }) => {
         navigate(`${location.pathname}?page=${page}`)
     }
 
-    useEffect(() => {
-        setTotalPages(totalPages);
-    }, [totalPages]);
-    
-    useEffect(() => {
-        setCurrentPage(parseInt(pageParam) || 1);
-        getPosts(parseInt(pageParam) || 1);
-    }, [pageParam]);
-
-    const getPosts = (page = 1) => {
+    const getPosts = useCallback((page = 1) => {
         console.log("page = ", page);
         setCurrentPage(parseInt(page) || 1);
         let params = {
@@ -56,7 +47,16 @@ const BlogList = ({ isAdmin }) => {
             setTotalPages(res.data.pages);     
             setLoading(false);
         })
-    }
+    }, [isAdmin]);
+
+    useEffect(() => {
+        setCurrentPage(parseInt(pageParam) || 1);
+        getPosts(parseInt(pageParam) || 1);
+    }, [pageParam, getPosts]);
+
+    useEffect(() => {
+        setTotalPages(totalPages);
+    }, [totalPages]);
 
     const deleteBlog = (e, id) => {
         e.stopPropagation();
