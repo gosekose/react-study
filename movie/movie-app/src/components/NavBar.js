@@ -7,7 +7,7 @@ import routes from '../routes/Route';
 const NavBar = () => {
     const navItems = routes.map((route) => {
         return (
-            <li className='nav-item'>
+            <li className='nav-item' key={route.path}>
                 <NavLink key={route.path} className="nav-link" to={route.path} end>
                     {route.name}
                 </NavLink>
