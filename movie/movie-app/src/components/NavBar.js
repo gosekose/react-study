@@ -1,9 +1,10 @@
-import {
-    Link, NavLink
-} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { login, logout } from '../store/authSlice';
 
 const NavBar = () => {
-
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
     const menu = [
         {
             path: '/',
@@ -33,6 +34,20 @@ const NavBar = () => {
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav mr-auto">
+                    <li className='nav-item'>
+                        <button
+                            className='btn-link text-decoration-none'
+                            onClick={() => {
+                                if (isLoggedIn) {
+                                    dispatch(logout());
+                                } else {
+                                    dispatch(login());
+                                }
+                            }}
+                        >
+                            {isLoggedIn ? 'Logout' : 'Login'}
+                        </button>
+                    </li>
                     {navItems}
                 </ul>
             </div>

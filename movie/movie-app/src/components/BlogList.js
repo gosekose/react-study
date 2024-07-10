@@ -9,12 +9,9 @@ import Pagination from "./Pagination";
 import { useLocation } from "react-router-dom";
 import propTypes from 'prop-types';
 import SearchBar from "./SearchBar";
-import Toast from "./Toast";
-import useToast from "../hooks/toast";
+import useToast from "../hooks/toast"
 
 const BlogList = ({ isAdmin }) => {
-    const [toasts, addToast, deleteToast] = useToast([]);
-
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -24,6 +21,7 @@ const BlogList = ({ isAdmin }) => {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const pageParam = params.get('page');
+    const { addToast } = useToast();
 
     const onClickPageButton = (page) => {
         navigate(`${location.pathname}?page=${page}`)
@@ -133,9 +131,6 @@ const BlogList = ({ isAdmin }) => {
                     />
                 </>
             }
-            <Toast
-                toasts={toasts}
-                deleteToast={deleteToast} />
         </div>
 
     )
