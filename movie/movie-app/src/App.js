@@ -44,7 +44,6 @@ function App() {
             {routes.map((route) => {
               return <Route
                 key={route.key}
-                exact
                 path={route.path}
                 element={route.auth ? <ProtectedRoute
                   key={route.key}
