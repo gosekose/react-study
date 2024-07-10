@@ -13,6 +13,8 @@ import useToast from './hooks/toast';
 import { useEffect, useState } from 'react';
 import { login } from './store/authSlice';
 import LoadingSpinner from './components/LoadingSpinner';
+import ProtectedRoute from './ProtectedRoute';
+import { element } from 'prop-types';
 
 function App() {
   const toasts = useSelector(state => state.toast.toasts);
@@ -40,21 +42,15 @@ function App() {
         <div className="container mt-3">
           <Routes>
             {routes.map((route) => {
-              if (!isLoggedIn && route.auth) {
-                console.log(route.path)
-                return (
-                  <Route
-                    key={route.path}
-                    path={route.path}
-                    element={<Navigate to="/"/>}
-                  />
-                );
-              }
               return <Route
-                key={route.path}
+                key={route.key}
                 exact
                 path={route.path}
-                element={route.element}
+                element={route.auth ? <ProtectedRoute
+                  key={route.key}
+                  path={route.path}
+                  element={route.element}
+                /> : route.element}
               />;
             })}
           </Routes>
