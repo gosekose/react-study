@@ -9,25 +9,30 @@ const NavBar = () => {
         {
             path: '/',
             name: 'Home',
+            auth: false,
         },
         {
             path: '/blogs',
             name: 'Blogs',
+            auth: false,
         },
         {
             path: '/admin',
             name: 'Admin',
+            auth: true,
         },
     ]
-
+    
     const navItems = menu.map((route) => {
-        return (
-            <li className='nav-item' key={route.path}>
-                <NavLink key={route.path} className="nav-link" to={route.path} end>
-                    {route.name}
-                </NavLink>
-            </li>
-        );
+        if (!isLoggedIn && route.auth) {
+            return;
+        }
+
+        return <li className='nav-item' key={route.path}>
+            <NavLink key={route.path} className="nav-link" to={route.path} end>
+                {route.name}
+            </NavLink>
+        </li>
     });
 
     return (

@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
 } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import routes from './routes/Route';
@@ -12,6 +13,7 @@ import useToast from './hooks/toast';
 
 function App() {
   const toasts = useSelector(state => state.toast.toasts);
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   const { deleteToast } = useToast();
   return (
     <Router>
@@ -21,6 +23,16 @@ function App() {
         <div className="container mt-3">
           <Routes>
             {routes.map((route) => {
+              if (!isLoggedIn && route.auth) {
+                console.log(route.path)
+                return (
+                  <Route
+                    key={route.path}
+                    path={route.path}
+                    element={<Navigate to="/"/>}
+                  />
+                );
+              }
               return <Route
                 key={route.path}
                 exact
