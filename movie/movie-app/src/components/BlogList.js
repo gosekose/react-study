@@ -23,6 +23,8 @@ const BlogList = ({ isAdmin }) => {
     const pageParam = params.get('page');
     const { addToast } = useToast();
 
+    const [error, setError] = useState('');
+
     const onClickPageButton = (page) => {
         navigate(`${location.pathname}?page=${page}`)
         setCurrentPage(parseInt(page) || 1);
@@ -54,7 +56,12 @@ const BlogList = ({ isAdmin }) => {
             setPosts(res.data.data);
             setTotalPages(res.data.pages);
             setLoading(false);
+        }).catch(e => {
+            setLoading(false);
+            console.log("e = ", e)
+            setError('Something went wrong in database');
         })
+        
     }, [isAdmin, searchText]);
 
     useEffect(() => {
@@ -74,12 +81,19 @@ const BlogList = ({ isAdmin }) => {
                 text: '삭제되었습니다.',
                 type: 'success'
             })
+        }).catch(e => {
+            console.log("e = ", e)
+            setError('Something went wrong in database');
         })
     }
 
     if (loading) {
         return <LoadingSpinner />;
     };
+
+    if (error) {
+        return <div>{error}</div>   
+    }
 
     const viewBlogList = () => {
         return (

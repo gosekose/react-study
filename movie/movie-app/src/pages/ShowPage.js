@@ -5,19 +5,40 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import CreatedAt from "../components/CreatedAt";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import useToast from "../hooks/toast";
 
 const ShowPage = () => {
     const { id } = useParams();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [timer, setTimer] = useState(0);
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const [error, setError] = useState('');
+    const { addToast } = useToast();
 
     const getPost = (id) => {
         axios.get(`http://localhost:3030/posts/${id}`).then((res) => {
             setPost(res.data);
             setLoading(false);
-        })
+        }).catch((e) => {
+            console.log("eeeee = ", e)
+            setLoading(false);
+            addToast({
+                type: 'danger',
+                text: 'Not Found'
+            });
+            setError("Not Found!");
+        }) 
     }
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimer(prev => prev + 1)
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        }
+    }, []);
 
     useEffect(() => {
         getPost(id)
@@ -26,6 +47,11 @@ const ShowPage = () => {
     if (loading) {
         return <LoadingSpinner />
     }
+
+    if (error) {
+        return <div>{error}</div>   
+    }
+
 
     return (
         <div>

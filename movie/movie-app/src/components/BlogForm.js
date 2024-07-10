@@ -20,6 +20,7 @@ const BlogForm = ({ editing }) => {
 
     const [titleError, setTitleError] = useState(false);
     const [bodyError, setBodyError] = useState(false);
+    const [error, setError] = useState('');
 
     const { id } = useParams();
 
@@ -54,6 +55,12 @@ const BlogForm = ({ editing }) => {
                 createdAt: Date.now()
             }).then(() => {
                 navigate(`/blogs/${id}`);
+            }).catch((e) => {
+                addToast({
+                    type: 'danger',
+                    text: 'error!!!'
+                })
+                setError('error!!!')
             })
         } else {
             console.log(title, body);
@@ -68,6 +75,12 @@ const BlogForm = ({ editing }) => {
                     text: 'Successfully Create'
                 })
                 navigate('/admin');
+            }).catch((e) => {
+                addToast({
+                    type: 'danger',
+                    text: 'error!!!'
+                })
+                setError('error!!!')
             })
         }
     };
@@ -101,6 +114,10 @@ const BlogForm = ({ editing }) => {
             })
         }
     }, [id, editing]);
+
+    if (error) {
+        return <div>{error}</div>
+    }
 
     return (
         <div>
